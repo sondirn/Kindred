@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kindred.GL", "Kindred.GL\Kindred.GL.csproj", "{38926387-5C3C-4A4E-AB52-9754FF249933}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Kindred.Base", "Kindred.Base\Kindred.Base.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Kindred.Base\Kindred.Base.projitems*{38926387-5c3c-4a4e-ab52-9754ff249933}*SharedItemsImports = 4
+		Kindred.Base\Kindred.Base.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38926387-5C3C-4A4E-AB52-9754FF249933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38926387-5C3C-4A4E-AB52-9754FF249933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38926387-5C3C-4A4E-AB52-9754FF249933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38926387-5C3C-4A4E-AB52-9754FF249933}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9092631-6D89-4099-8D52-2AB4FC760A0F}
+	EndGlobalSection
+EndGlobal

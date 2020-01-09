@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>299ddeb6-8be8-45c2-8396-57601dfe12d3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Kindred.Base</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Map.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\MapRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledLayerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledMapData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledTileSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSetsData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Assets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DependencyContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\IDependencyContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\JsonDeserialize.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Content\MapTest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Content\Test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
