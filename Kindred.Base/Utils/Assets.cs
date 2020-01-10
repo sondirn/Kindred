@@ -34,5 +34,17 @@ namespace Kindred.Base.Utils
                 Console.WriteLine("Texture Asset " + name + " Has Already Been Added");
             }
         }
+
+        public static void RemoveTexture(string name)
+        {
+            if (textures.ContainsKey(name))
+            {
+                textures.Remove(name);
+            }
+            else
+            {
+                Console.WriteLine("Texture Asset " + name + "Can't be removed, It does not exist");
+            }
+        }
     }
 }

@@ -20,12 +20,15 @@ namespace Kindred.Base
         private Map realmap;
         public Camera2D camera;
         public Assets assets;
+        readonly MapRenderer mRenderer;
         public KindredMain()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
+            mRenderer = new MapRenderer();
+            realmap = new Map();
         }
 
         /// <summary>
@@ -40,8 +43,6 @@ namespace Kindred.Base
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            //mp = JsonDeserialize.DeserializeJSON<TiledMapData>("MapTest.json");
-            realmap.FillMap(JsonDeserialize.DeserializeJSON<TiledMapData>("MapTest.json"));
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
             graphics.ApplyChanges();
@@ -62,6 +63,7 @@ namespace Kindred.Base
                     1, 1
                 }
                 );
+            realmap.GenerateMap("MapTest");
         }
 
         /// <summary>
@@ -71,7 +73,6 @@ namespace Kindred.Base
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
             assets = new Assets(Content);
 
             // TODO: use this.Content to load your game content here
@@ -111,22 +112,8 @@ namespace Kindred.Base
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin(camera.Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
 
-            int startX = Common.Clamp((camera.ScreenBounds().X / realmap.TileWidth) - 1, 0, realmap.Width);
-            int startY = Common.Clamp((camera.ScreenBounds().Y / realmap.TileHeight) - 1, 0, realmap.Height);
-            int endX = Common.Clamp(startX + (camera.ScreenBounds().Width / realmap.TileWidth) + 3, 0, realmap.Width);
-            int endY = Common.Clamp(startY + (camera.ScreenBounds().Height / realmap.TileHeight) + 3, 0, realmap.Height);
-            foreach (Layer layer in realmap.Layers)
-            {
-            
-                for (int y = startY; y < endY; y++)
-                {
-                    for (int x = startX; x < endX; x++)
-                    {
-                        if (layer.Data[y, x] != 0)
-                            spriteBatch.Draw(realmap.TileArray[layer.Data[y, x] - 1], new Vector2(x * 16, y * 16), Color.White);
-                    }
-                }
-            }
+            mRenderer.Draw(camera.GetScreenBounds(), spriteBatch, realmap);
+
             spriteBatch.End();
             spriteBatch.Draw(camera.Camera.Debug);
 

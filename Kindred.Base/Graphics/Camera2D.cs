@@ -71,7 +71,7 @@ namespace Kindred.Base.Graphics
             return Vector2.Transform(screenPosition, Camera.ViewportOffset.Absolute);
         }
 
-        public Rectangle ScreenBounds()
+        public Rectangle GetScreenBounds()
         {
             if (Camera.Zoom > 1)
             {

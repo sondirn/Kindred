@@ -31,8 +31,8 @@ namespace Kindred.Base.Maps
             int i = 0;
             int[,] result = new int[Height, Width];
 
-            Console.WriteLine("-------------------------------");
-            Console.WriteLine("Layer: " + Name);
+           // Console.WriteLine("-------------------------------");
+            //Console.WriteLine("Layer: " + Name);
             
 
             for(int x = 0; x < Height; x++)
@@ -41,9 +41,9 @@ namespace Kindred.Base.Maps
                 {
                     result[x, y] = data.Data[i];
                     i++;
-                    Console.Write(result[x, y] + " ");
+                    //Console.Write(result[x, y] + " ");
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
             }
             Data = result;
             
