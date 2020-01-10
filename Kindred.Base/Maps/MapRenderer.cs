@@ -36,8 +36,8 @@ namespace Kindred.Base.Maps
                         {
                             if (layer.Data[y, x] != 0)
                             {
-                                sb.Draw(map.TileArray[layer.Data[y, x] - 1], new Vector2(x * 16, y * 16), Color.White);
-
+                                sb.Draw(map.TileArray[layer.Data[y, x] - 1], new Vector2(x * map.TileWidth, y * map.TileHeight), Color.White);
+                                //TODO: Is there a better way to do this? Perhaps Have vector start at 1, let index 0 be a blank texture??
                             }
                             
                         }
