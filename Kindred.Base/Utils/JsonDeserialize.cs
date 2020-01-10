@@ -34,7 +34,7 @@ namespace Kindred.Base.Utils
             try
             {
                 string result;
-                using(var reader = new StreamReader(@"Content\MapTest.json"))
+                using(var reader = new StreamReader(@"Content\MapTest.json")) // change it to local variable
                 {
                     result = reader.ReadToEnd();
                 }
