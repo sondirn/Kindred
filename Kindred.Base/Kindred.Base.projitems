@@ -24,6 +24,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSetsData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Dependencies.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Input.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\JsonDeserialize.cs" />
   </ItemGroup>
   <ItemGroup>

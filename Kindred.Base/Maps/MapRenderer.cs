@@ -1,10 +1,7 @@
-﻿using Kindred.Base.Maps.Utils;
-using Kindred.Base.Utils;
+﻿using Kindred.Base.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kindred.Base.Maps
 {
@@ -14,7 +11,7 @@ namespace Kindred.Base.Maps
 
         public MapRenderer()
         {
-
+            
         }
 
 
@@ -22,33 +19,24 @@ namespace Kindred.Base.Maps
         {
 
         }
-        public void Draw(Rectangle bounds, SpriteBatch sb, Map Map)
+        public void Draw(SpriteBatch sb)
         {
-            int startX = Common.Clamp((bounds.X), 0, Map.Width * Map.TileWidth);
-            int startY = Common.Clamp((bounds.Y), 0, Map.Height * Map.TileHeight);
-            int endX = Common.Clamp(startX + (bounds.Width), 0, Map.Width * Map.TileWidth);
-            int endY = Common.Clamp(startY + (bounds.Height), 0, Map.Height * Map.TileHeight);
-            startX /= Map.TileWidth;
-            startY /= Map.TileHeight;
-            endY /= Map.TileHeight;
-            endX /= Map.TileWidth;
-            endY += 1;
-            endX += 1;
-            Console.WriteLine(startX);
-            Console.WriteLine(endX);
+            var map = Dependencies.GetMap();
+            var bounds = Dependencies.GetCamera().ScreenBounds;
+            
 
-            foreach (Layer layer in Map.Layers)
+            foreach (Layer layer in map.Layers)
             {
 
-                for (int y = startY; y < endY; y++)
+                for (int y = bounds.StartY; y < bounds.EndY; y++)
                 {
-                    for (int x = startX; x < endX; x++)
+                    for (int x = bounds.StartX; x < bounds.EndX; x++)
                     {
                         if (x < layer.Data.GetLength(0) && y < layer.Data.GetLength(1))
                         {
                             if (layer.Data[y, x] != 0)
                             {
-                                sb.Draw(Map.TileArray[layer.Data[y, x] - 1], new Vector2(x * 16, y * 16), Color.White);
+                                sb.Draw(map.TileArray[layer.Data[y, x] - 1], new Vector2(x * 16, y * 16), Color.White);
 
                             }
                             

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace Kindred.Base.Maps
 {
@@ -37,7 +38,7 @@ namespace Kindred.Base.Maps
             }
             TileArray = new Texture2D[tempdata.Count];
             TileArray = tempdata.ToArray();
-            Console.WriteLine("Map " + Name + " Has Been Loaded");
+            Debug.WriteLine("Map " + Name + " Has Been Loaded");
 
         }
 

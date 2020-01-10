@@ -6,6 +6,7 @@ using Kindred.Base.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 using System;
 
 namespace Kindred.Base
@@ -15,11 +16,11 @@ namespace Kindred.Base
     /// </summary>
     public class KindredMain : Game
     {
+
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Map realmap;
-        public Camera2D camera;
         public Assets assets;
+        public Dependencies dependencies;
         readonly MapRenderer mRenderer;
         public KindredMain()
         {
@@ -28,7 +29,6 @@ namespace Kindred.Base
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
             mRenderer = new MapRenderer();
-            realmap = new Map();
         }
 
         /// <summary>
@@ -43,27 +43,15 @@ namespace Kindred.Base
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width / 2;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
+            Window.IsBorderless = false;
+            Window.Title = "Kindred " + "Version: " + Common.DisplayVersion;
             graphics.ApplyChanges();
-            camera = new Camera2D(GraphicsDevice, 640, 360, Comora.AspectMode.FillStretch);
-            camera.LoadContent();
-            camera.Camera.Zoom = 1f;
-            camera.AddDebugLines(
-                new int[]
-                {
-                    16, 16 * 4
-                },
-                new Color[]
-                {
-                    new Color(50, 50, 50, 50), new Color(0, 0, 100, 100)
-                },
-                new int[]
-                {
-                    1, 1
-                }
-                );
-            realmap.GenerateMap("MapTest");
+            //Inject Dependencies
+            dependencies = new Dependencies();
+            Dependencies.GenerateMap("MapTest");
+            Dependencies.CreateCamera(GraphicsDevice);
         }
 
         /// <summary>
@@ -94,10 +82,17 @@ namespace Kindred.Base
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Input.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            camera.Position = Mouse.GetState().Position.ToVector2();
-            camera.Update(gameTime);
+            //Dependencies.GetCamera().Position = Mouse.GetState().Position.ToVector2();
+            Vector2 move = Vector2.Zero;
+            move.X = Input.GetAxis("Horizontal");
+            move.Y = Input.GetAxis("Vertical");
+            if(move != Vector2.Zero)
+                move = Vector2.Normalize(move);
+            Dependencies.GetCamera().Position += move * 320f * Common.GetDelta(gameTime);
+            Dependencies.GetCamera().Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -110,12 +105,12 @@ namespace Kindred.Base
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
-            spriteBatch.Begin(camera.Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
 
-            mRenderer.Draw(camera.GetScreenBounds(), spriteBatch, realmap);
+            mRenderer.Draw(spriteBatch);
 
             spriteBatch.End();
-            spriteBatch.Draw(camera.Camera.Debug);
+            spriteBatch.Draw(Dependencies.GetCamera().Camera.Debug);
 
             // TODO: Add your drawing code here
 

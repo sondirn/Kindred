@@ -46,5 +46,11 @@ namespace Kindred.Base.Utils
                 Console.WriteLine("Texture Asset " + name + "Can't be removed, It does not exist");
             }
         }
+
+        public static void FlushTextures()
+        {
+            textures.Clear();
+            Console.WriteLine("Textures have been flushed");
+        }
     }
 }

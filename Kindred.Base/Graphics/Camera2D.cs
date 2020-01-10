@@ -1,4 +1,6 @@
 ﻿using Comora;
+using Kindred.Base.Maps;
+using Kindred.Base.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,6 +12,7 @@ namespace Kindred.Base.Graphics
     public class Camera2D
     {
         public Camera Camera;
+        public ScreenBounds ScreenBounds;
         public Vector2 Position { get
             {
                 return Camera.Position;
@@ -58,6 +61,7 @@ namespace Kindred.Base.Graphics
 
         public void Update(GameTime gameTime)
         {
+            UpdateScreenBounds();
             Camera.Update(gameTime);
         }
 
@@ -71,7 +75,7 @@ namespace Kindred.Base.Graphics
             return Vector2.Transform(screenPosition, Camera.ViewportOffset.Absolute);
         }
 
-        public Rectangle GetScreenBounds()
+        public Rectangle GetScreenRect()
         {
             if (Camera.Zoom > 1)
             {
@@ -87,6 +91,29 @@ namespace Kindred.Base.Graphics
             }
 
         }
+        public void UpdateScreenBounds()
+        {
+            var map = Dependencies.GetMap();
+            var bound = GetScreenRect();
+            ScreenBounds.StartX = Common.Clamp(bound.X, 0, map.Width * map.TileWidth);
+            ScreenBounds.StartY = Common.Clamp(bound.Y, 0, map.Height * map.TileHeight);
+            ScreenBounds.EndX = Common.Clamp(ScreenBounds.StartX + bound.Width, 0, map.Width * map.TileWidth);
+            ScreenBounds.EndY = Common.Clamp(ScreenBounds.StartY + bound.Height, 0, map.Height * map.TileHeight);
+            ScreenBounds.StartX /= map.TileWidth;
+            ScreenBounds.StartY /= map.TileHeight;
+            ScreenBounds.EndX /= map.TileWidth;
+            ScreenBounds.EndY /= map.TileHeight;
+            ScreenBounds.EndX += 1;
+            ScreenBounds.EndY += 1;
+        }
 
+    }
+
+    public struct ScreenBounds
+    {
+        public int StartX { get; set; }
+        public int StartY { get; set; }
+        public int EndX { get; set; }
+        public int EndY { get; set; }
     }
 }

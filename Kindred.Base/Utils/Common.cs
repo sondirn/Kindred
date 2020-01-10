@@ -10,10 +10,10 @@ namespace Kindred.Base.Utils
     public static class Common
     {
         public static string LOAD_DATA = Environment.CurrentDirectory + @"\Content\";
-        public static string VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         public static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         public static DateTime buildDate = new DateTime(2020, 1, 8).AddDays(version.Build).AddSeconds(version.Revision * 2);
-        public static string DisplayVersion = $"{version} ({buildDate})";
+        public static string DisplayVersion = $"{version}";
+        
         public static int Clamp(int value, int min, int max)
         {
             return (value < min) ? min : (value > max) ? max : value;
@@ -62,6 +62,11 @@ namespace Kindred.Base.Utils
                 }
             }
             return r;
+        }
+
+        public static float GetDelta(GameTime gameTime)
+        {
+            return (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
     }
 }
