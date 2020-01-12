@@ -1,12 +1,10 @@
 ﻿using Comora;
-using Kindred.Base.Graphics;
 using Kindred.Base.Maps;
-using Kindred.Base.Maps.Utils;
 using Kindred.Base.Utils;
+using Kindred.Base.Utils.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using System;
 
 namespace Kindred.Base
@@ -16,7 +14,6 @@ namespace Kindred.Base
     /// </summary>
     public class KindredMain : Game
     {
-
         readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Assets assets;
@@ -41,7 +38,7 @@ namespace Kindred.Base
         {
             Console.WriteLine(Common.DisplayVersion);
             // TODO: Add your initialization logic here
-
+            IsMouseVisible = true;
             base.Initialize();
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width / 2;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height / 2;
@@ -50,7 +47,7 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            Dependencies.GenerateMap("MapTest");
+            Dependencies.GenerateMap("Dungeon1");
             Dependencies.CreateCamera(GraphicsDevice);
         }
 
@@ -82,14 +79,30 @@ namespace Kindred.Base
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            Input.Update();
+            KeyboardInput.Update();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             //Dependencies.GetCamera().Position = Mouse.GetState().Position.ToVector2();
             Vector2 move = Vector2.Zero;
-            move.X = Input.GetAxis("Horizontal");
-            move.Y = Input.GetAxis("Vertical");
-            if(move != Vector2.Zero)
+            move.X = KeyboardInput.GetAxis("Horizontal");
+            move.Y = KeyboardInput.GetAxis("Vertical");
+            if (KeyboardInput.IsKeyDown(Keys.LeftAlt) && KeyboardInput.WasKeyJustDown(Keys.Enter))
+            {
+                Window.IsBorderless = !Window.IsBorderless;
+                if (Window.IsBorderless)
+                {
+                    graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+                    graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+                    graphics.ApplyChanges();
+                }
+                else
+                {
+                    graphics.PreferredBackBufferWidth = 1920;
+                    graphics.PreferredBackBufferHeight = 1080;
+                    graphics.ApplyChanges();
+                } 
+            }
+            if (move != Vector2.Zero)
                 move = Vector2.Normalize(move);
             Dependencies.GetCamera().Position += move * 320f * Common.GetDelta(gameTime);
             Dependencies.GetCamera().Update(gameTime);

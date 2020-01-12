@@ -1,10 +1,7 @@
 ﻿using Kindred.Base.Maps.Utils;
 using Kindred.Base.Utils;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 namespace Kindred.Base.Maps
@@ -31,7 +28,7 @@ namespace Kindred.Base.Maps
                 Layers[i].FillData(data.Layers[i]);
             }
             var tempdata = new List<Texture2D>();
-            for(int i = 0; i < data.TileSets.Length; i++)
+            for (int i = 0; i < data.TileSets.Length; i++)
             {
                 Assets.AddTexture(data.TileSets[i].Name);
                 tempdata.AddRange(Common.Split(Assets.GetTexture(data.TileSets[i].Name), TileWidth, TileHeight));
@@ -39,7 +36,6 @@ namespace Kindred.Base.Maps
             TileArray = new Texture2D[tempdata.Count];
             TileArray = tempdata.ToArray();
             Debug.WriteLine("Map " + Name + " Has Been Loaded");
-
         }
 
         public void GenerateMap(string mapName)

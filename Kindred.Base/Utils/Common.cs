@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace Kindred.Base.Utils
 {
@@ -13,7 +10,7 @@ namespace Kindred.Base.Utils
         public static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         public static DateTime buildDate = new DateTime(2020, 1, 8).AddDays(version.Build).AddSeconds(version.Revision * 2);
         public static string DisplayVersion = $"{version}";
-        
+
         public static int Clamp(int value, int min, int max)
         {
             return (value < min) ? min : (value > max) ? max : value;
@@ -25,7 +22,7 @@ namespace Kindred.Base.Utils
         /// <param name="original">The texture to be split into smaller textures</param>
         /// <param name="partWidth">The width of each of the smaller textures that will be contained in the returned array.</param>
         /// <param name="partHeight">The height of each of the smaller textures that will be contained in the returned array.</param>
-        public static Texture2D[] Split(Texture2D texture,int CellWidth, int CellHeight)
+        public static Texture2D[] Split(Texture2D texture, int CellWidth, int CellHeight)
         {
             var CellsWide = texture.Width / CellWidth;
             var CellsHigh = texture.Height / CellHeight;
@@ -46,7 +43,7 @@ namespace Kindred.Base.Utils
                     //data for tile
                     Color[] cellData = new Color[pixelsperTile];
                     //Fill tile data
-                    for(int ty = 0; ty < CellHeight; ty++)
+                    for (int ty = 0; ty < CellHeight; ty++)
                     {
                         for (int tx = 0; tx < CellWidth; tx++)
                         {

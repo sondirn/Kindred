@@ -1,7 +1,4 @@
 ﻿using Kindred.Base.Maps.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kindred.Base.Maps
 {
@@ -27,15 +24,13 @@ namespace Kindred.Base.Maps
             X = data.X;
             Y = data.Y;
 
-
             int i = 0;
             int[,] result = new int[Height, Width];
 
-           // Console.WriteLine("-------------------------------");
+            // Console.WriteLine("-------------------------------");
             //Console.WriteLine("Layer: " + Name);
-            
 
-            for(int x = 0; x < Height; x++)
+            for (int x = 0; x < Height; x++)
             {
                 for (int y = 0; y < Width; y++)
                 {
@@ -46,7 +41,6 @@ namespace Kindred.Base.Maps
                 //Console.WriteLine();
             }
             Data = result;
-            
         }
     }
 }

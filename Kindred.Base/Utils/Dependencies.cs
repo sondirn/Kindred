@@ -2,9 +2,6 @@
 using Kindred.Base.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kindred.Base.Utils
 {
@@ -15,9 +12,10 @@ namespace Kindred.Base.Utils
 
         public Dependencies()
         {
-            
         }
+
         #region camera functions
+
         public static void CreateCamera(GraphicsDevice graphics)
         {
             camera = new Camera2D(graphics, 640, 360, Comora.AspectMode.FillStretch);
@@ -43,8 +41,11 @@ namespace Kindred.Base.Utils
         {
             return camera;
         }
-        #endregion
+
+        #endregion camera functions
+
         #region Map Functions
+
         public static void GenerateMap(string name)
         {
             if (map == null)
@@ -56,6 +57,7 @@ namespace Kindred.Base.Utils
         {
             return map;
         }
-        #endregion
+
+        #endregion Map Functions
     }
 }

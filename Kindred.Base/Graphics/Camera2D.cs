@@ -1,11 +1,8 @@
 ﻿using Comora;
-using Kindred.Base.Maps;
 using Kindred.Base.Utils;
+using Kindred.Base.Utils.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kindred.Base.Graphics
 {
@@ -13,7 +10,9 @@ namespace Kindred.Base.Graphics
     {
         public Camera Camera;
         public ScreenBounds ScreenBounds;
-        public Vector2 Position { get
+        public Vector2 Position
+        {
+            get
             {
                 return Camera.Position;
             }
@@ -30,8 +29,18 @@ namespace Kindred.Base.Graphics
                 Height = cHeight,
                 ResizeMode = cAspect
             };
-            Camera.Debug.IsVisible = true;
+            Camera.Debug.IsVisible = false;
             Camera.Position = Vector2.Zero;
+        }
+        public void Update(GameTime gameTime)
+        {
+            if (KeyboardInput.WasKeyJustDown(Microsoft.Xna.Framework.Input.Keys.F1))
+            {
+                Camera.Debug.IsVisible = !Camera.Debug.IsVisible;
+            }
+            //Position = new Vector2(Common.Clamp((int)Position.X, 0 - GetScreenRect().Left, Dependencies.GetMap().Width * 16), Camera.Position.Y);
+            UpdateScreenBounds();
+            Camera.Update(gameTime);
         }
 
         public void AddDebugLines(int[] size, Color[] color, int[] width)
@@ -58,13 +67,6 @@ namespace Kindred.Base.Graphics
         {
             Camera.LoadContent();
         }
-
-        public void Update(GameTime gameTime)
-        {
-            UpdateScreenBounds();
-            Camera.Update(gameTime);
-        }
-
         public Vector2 ScreenToWorldTile(Vector2 screenPosition, Vector2 tileSize)
         {
             return Vector2.Transform(screenPosition, Camera.ViewportOffset.Absolute) / tileSize;
@@ -89,7 +91,6 @@ namespace Kindred.Base.Graphics
                 var newWidth = regWidth * (1 / Camera.Zoom);
                 return new Rectangle((int)((Camera.Position.X - ((newWidth - regWidth) / 2)) - (Camera.Width / 2f)), (int)((Camera.Position.Y - ((newHeight - regHeight) / 2)) - (Camera.Height / 2f)), (int)(newWidth), (int)(newHeight));
             }
-
         }
         public void UpdateScreenBounds()
         {
@@ -106,7 +107,6 @@ namespace Kindred.Base.Graphics
             ScreenBounds.EndX += 1;
             ScreenBounds.EndY += 1;
         }
-
     }
 
     public struct ScreenBounds

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
-using Kindred.Base.Maps.Utils;
 
 namespace Kindred.Base.Utils
 {
@@ -18,15 +14,14 @@ namespace Kindred.Base.Utils
             try
             {
                 //Return object w/ json data
-                 return JsonConvert.DeserializeObject<T>(jsonString);
+                return JsonConvert.DeserializeObject<T>(jsonString);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //write to console
                 Console.WriteLine("Problem: " + ex.Message.ToString());
                 return default;
             }
-
         }
 
         public static string ReadJSON(string path)
@@ -34,19 +29,17 @@ namespace Kindred.Base.Utils
             try
             {
                 string result;
-                using(var reader = new StreamReader(@"Content\MapTest.json")) // change it to local variable
+                using (var reader = new StreamReader(@"Content\" + path)) // change it to local variable
                 {
                     result = reader.ReadToEnd();
                 }
                 return result;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message.ToString() + ", Could not load JSON file: " + path);
                 throw new System.ArgumentException("Error: " + ex.Message.ToString() + ", Could not load JSON file: " + path);
             }
-            
         }
-
-        
     }
 }

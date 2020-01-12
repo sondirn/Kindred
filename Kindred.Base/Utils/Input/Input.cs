@@ -1,13 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Kindred.Base.Utils
+namespace Kindred.Base.Utils.Input
 {
-    public class Input
+    public class KeyboardInput
     {
         private static KeyboardStateExtended _currentKeyboardState;
         public static void Update()
@@ -27,9 +23,9 @@ namespace Kindred.Base.Utils
         public static bool IsAltDown() => _currentKeyboardState.IsAltDown();
         public static bool IsKeyDown(Keys key) => _currentKeyboardState.IsKeyDown(key);
         public static bool IsKeyUp(Keys key) => _currentKeyboardState.IsKeyUp(key);
-        public static Keys[] GetPressedKeys() => _currentKeyboardState.GetPressedKeys();    
-        public static bool WasKeyJustDown(Keys key) => _currentKeyboardState.WasKeyJustDown(key);
-        public static bool WasKeyJustUp(Keys key) => _currentKeyboardState.WasKeyJustUp(key);
+        public static Keys[] GetPressedKeys() => _currentKeyboardState.GetPressedKeys();
+        public static bool WasKeyJustDown(Keys key) => _currentKeyboardState.WasKeyJustUp(key);
+        public static bool WasKeyJustUp(Keys key) => _currentKeyboardState.WasKeyJustDown(key);
         public static bool WasAnyKeyJustDown() => _currentKeyboardState.WasAnyKeyJustDown();
         public static float GetAxis(string direction)
         {
@@ -37,6 +33,7 @@ namespace Kindred.Base.Utils
             {
                 case "Horizontal":
                     return IsKeyDown(Keys.A) ? -1 : IsKeyDown(Keys.D) ? 1 : IsKeyDown(Keys.Left) ? -1 : IsKeyDown(Keys.Right) ? 1 : 0;
+
                 case "Vertical":
                     return IsKeyDown(Keys.W) ? -1 : IsKeyDown(Keys.S) ? 1 : IsKeyDown(Keys.Up) ? -1 : IsKeyDown(Keys.Down) ? 1 : 0;
 
@@ -44,7 +41,5 @@ namespace Kindred.Base.Utils
                     return 0;
             }
         }
-
-
     }
 }
