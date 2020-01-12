@@ -41,6 +41,16 @@ namespace Kindred.Base.Maps
 
         public void GenerateMap(string mapName)
         {
+            //MapLoader.GenerateMap(this, mapName);
+            if(Layers != null)
+            {
+                foreach (Layer layer in Layers)
+                {
+                    layer.Dispose();
+                    System.GC.Collect();
+                }
+            }
+            
             Name = mapName;
             FillMap(JsonDeserialize.DeserializeJSON<TiledMapData>(mapName + ".Json"));
         }

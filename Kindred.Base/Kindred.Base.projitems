@@ -12,17 +12,11 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\ComponentMapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\ComponentManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\Entity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\ISystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\World.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Map.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Maps\MapLoader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\MapRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledLayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledMapData.cs" />

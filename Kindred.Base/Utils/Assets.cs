@@ -9,11 +9,13 @@ namespace Kindred.Base.Utils
     {
         private static ContentManager content;
         private static Dictionary<string, Texture2D> textures;
+        private static Queue<string> textureQueue;
 
         public Assets(ContentManager contentManager)
         {
             content = contentManager;
             textures = new Dictionary<string, Texture2D>();
+            textureQueue = new Queue<string>();
         }
 
         public static Texture2D GetTexture(string name)

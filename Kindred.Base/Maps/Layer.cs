@@ -1,8 +1,9 @@
 ﻿using Kindred.Base.Maps.Utils;
+using System;
 
 namespace Kindred.Base.Maps
 {
-    public struct Layer
+    public struct Layer : IDisposable
     {
         public int Height { get; set; }
         public int Width { get; set; }
@@ -12,6 +13,11 @@ namespace Kindred.Base.Maps
         public bool Visible { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+
+        public void Dispose()
+        {
+            Data = null;
+        }
 
         public void FillData(TiledLayerData data)
         {

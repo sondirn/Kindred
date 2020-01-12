@@ -94,7 +94,10 @@ namespace Kindred.Base.Graphics
         }
         public void UpdateScreenBounds()
         {
+            
             var map = Dependencies.GetMap();
+            if (map == null)
+                return;
             var bound = GetScreenRect();
             ScreenBounds.StartX = Common.Clamp(bound.X, 0, map.Width * map.TileWidth);
             ScreenBounds.StartY = Common.Clamp(bound.Y, 0, map.Height * map.TileHeight);

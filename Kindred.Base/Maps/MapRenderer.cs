@@ -16,6 +16,8 @@ namespace Kindred.Base.Maps
         public void Draw(SpriteBatch sb)
         {
             var map = Dependencies.GetMap();
+            if (map == null)
+                return;
             var bounds = Dependencies.GetCamera().ScreenBounds;
 
             foreach (Layer layer in map.Layers)

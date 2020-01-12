@@ -47,7 +47,8 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            Dependencies.GenerateMap("Dungeon1");
+            if(KeyboardInput.WasKeyJustDown(Keys.I))
+                Dependencies.GenerateMap("Dungeon1");
             Dependencies.CreateCamera(GraphicsDevice);
         }
 
@@ -80,6 +81,8 @@ namespace Kindred.Base
         protected override void Update(GameTime gameTime)
         {
             KeyboardInput.Update();
+            if (KeyboardInput.WasKeyJustDown(Keys.I))
+                Dependencies.GenerateMap("Dungeon1");
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             //Dependencies.GetCamera().Position = Mouse.GetState().Position.ToVector2();
@@ -97,8 +100,8 @@ namespace Kindred.Base
                 }
                 else
                 {
-                    graphics.PreferredBackBufferWidth = 1920;
-                    graphics.PreferredBackBufferHeight = 1080;
+                    graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width /2;
+                    graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height /2;
                     graphics.ApplyChanges();
                 } 
             }
