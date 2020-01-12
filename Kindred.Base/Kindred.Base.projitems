@@ -12,6 +12,13 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\ComponentMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\ComponentManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\ISystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\World.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
@@ -25,7 +32,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Dependencies.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\Input\Input.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Input\InputDirectory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Input\KeyboardInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\JsonDeserialize.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -38,8 +46,5 @@
     <Content Include="$(MSBuildThisFileDirectory)Content\Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Utils\Input\" />
   </ItemGroup>
 </Project>

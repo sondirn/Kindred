@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Kindred.Base.Maps.Utils
 {
@@ -22,5 +23,6 @@ namespace Kindred.Base.Maps.Utils
         public TiledLayerData[] Layers { get; set; }
         [JsonProperty("tilesets")]
         public TileSetsData[] TileSets { get; set; }
+        
     }
 }

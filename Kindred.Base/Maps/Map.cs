@@ -36,6 +36,7 @@ namespace Kindred.Base.Maps
             TileArray = new Texture2D[tempdata.Count];
             TileArray = tempdata.ToArray();
             Debug.WriteLine("Map " + Name + " Has Been Loaded");
+            
         }
 
         public void GenerateMap(string mapName)
