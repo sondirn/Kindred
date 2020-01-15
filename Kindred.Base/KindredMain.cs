@@ -6,6 +6,7 @@ using Kindred.Base.Utils.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using System;
 
 namespace Kindred.Base
@@ -20,6 +21,11 @@ namespace Kindred.Base
         public Assets assets;
         public Dependencies dependencies;
         readonly MapRenderer mRenderer;
+        public static Texture2D lightMask;
+        public static Effect effect1;
+        public static Effect effect2;
+        RenderTarget2D lightsTarget;
+        RenderTarget2D mainTarget;
         public KindredMain()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -49,6 +55,10 @@ namespace Kindred.Base
             //Inject Dependencies
             dependencies = new Dependencies();
             Dependencies.CreateCamera(GraphicsDevice);
+            Dependencies.GenerateMap("MapTest");
+            var pp = GraphicsDevice.PresentationParameters;
+            lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
         }
 
         /// <summary>
@@ -59,6 +69,10 @@ namespace Kindred.Base
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             assets = new Assets(Content);
+            Assets.AddTexture("lightmask");
+            effect2 = Content.Load<Effect>(@"Effects\radialGradient");
+            lightMask = Assets.GetTexture("lightmask");
+            effect1 = Content.Load<Effect>(@"Effects\lighteffect");
 
             // TODO: use this.Content to load your game content here
         }
@@ -79,9 +93,12 @@ namespace Kindred.Base
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+           
             KeyboardInput.Update();
             if (KeyboardInput.WasKeyJustDown(Keys.I))
                 Dependencies.GenerateMap("Dungeon1");
+            if (KeyboardInput.WasKeyJustDown(Keys.P))
+                Dependencies.GenerateMap("MapTest");
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -96,12 +113,18 @@ namespace Kindred.Base
                     graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
                     graphics.ApplyChanges();
+                    var pp = GraphicsDevice.PresentationParameters;
+                    lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+                    mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                 }
                 else
                 {
                     graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width /2;
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height /2;
                     graphics.ApplyChanges();
+                    var pp = GraphicsDevice.PresentationParameters;
+                    lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+                    mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                 } 
             }
             if (move != Vector2.Zero)
@@ -120,13 +143,32 @@ namespace Kindred.Base
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
-            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+            
+            GraphicsDevice.SetRenderTarget(lightsTarget);
+            GraphicsDevice.Clear(Color.Black);
 
-            mRenderer.Draw(spriteBatch);
-
+            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
+            spriteBatch.Draw(lightMask, new Vector2(100,100), new Color(Color.White, 0.5f));
             spriteBatch.End();
-            spriteBatch.Draw(Dependencies.GetCamera().Camera.Debug);
 
+            GraphicsDevice.SetRenderTarget(mainTarget);
+            GraphicsDevice.Clear(Color.Transparent);
+            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
+            mRenderer.Draw(spriteBatch);
+            spriteBatch.End();
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.Black);
+
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            effect1.Parameters["lightMask"].SetValue(lightsTarget);
+            effect1.CurrentTechnique.Passes[0].Apply();
+            spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
+             
+            spriteBatch.End();
+
+            spriteBatch.Draw(Dependencies.GetCamera().Camera.Debug);
+            //spriteBatch.Draw(Dependencies.GetCamera().Camera.Debug);
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
