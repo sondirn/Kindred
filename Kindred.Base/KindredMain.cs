@@ -1,4 +1,5 @@
-﻿using Comora;
+﻿
+using Comora;
 using Kindred.Base.Maps;
 using Kindred.Base.Utils;
 using Kindred.Base.Utils.Input;
@@ -47,8 +48,6 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            if(KeyboardInput.WasKeyJustDown(Keys.I))
-                Dependencies.GenerateMap("Dungeon1");
             Dependencies.CreateCamera(GraphicsDevice);
         }
 
@@ -85,7 +84,7 @@ namespace Kindred.Base
                 Dependencies.GenerateMap("Dungeon1");
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            //Dependencies.GetCamera().Position = Mouse.GetState().Position.ToVector2();
+            
             Vector2 move = Vector2.Zero;
             move.X = KeyboardInput.GetAxis("Horizontal");
             move.Y = KeyboardInput.GetAxis("Vertical");
