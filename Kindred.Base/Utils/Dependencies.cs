@@ -20,7 +20,7 @@ namespace Kindred.Base.Utils
         {
             camera = new Camera2D(graphics, 640, 360, Comora.AspectMode.FillStretch);
             camera.LoadContent();
-            camera.Camera.Zoom = 1f;
+            camera.Camera.Zoom = 2f;
             camera.AddDebugLines(
                 new int[]
                 {

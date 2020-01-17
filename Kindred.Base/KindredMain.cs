@@ -27,6 +27,8 @@ namespace Kindred.Base
         RenderTarget2D lightsTarget;
         RenderTarget2D mainTarget;
         public static Texture2D bayerMask;
+        public static Texture2D lowRezMask;
+        private bool maskOn;
         public KindredMain()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,6 +47,7 @@ namespace Kindred.Base
         protected override void Initialize()
         {
             Console.WriteLine(Common.DisplayVersion);
+            maskOn = false;
             // TODO: Add your initialization logic here
             IsMouseVisible = true;
             base.Initialize();
@@ -74,7 +77,8 @@ namespace Kindred.Base
             effect2 = Content.Load<Effect>(@"Effects\radialGradient");
             lightMask = Assets.GetTexture("lightmask");
             effect1 = Content.Load<Effect>(@"Effects\lighteffect");
-            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix");
+            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix2048");
+            lowRezMask = Content.Load<Texture2D>(@"Effects\BayerMatrix2x2");
 
             // TODO: use this.Content to load your game content here
         }
@@ -101,6 +105,8 @@ namespace Kindred.Base
                 Dependencies.GenerateMap("Dungeon1");
             if (KeyboardInput.WasKeyJustDown(Keys.P))
                 Dependencies.GenerateMap("MapTest");
+            if (KeyboardInput.WasKeyJustDown(Keys.J))
+                maskOn = !maskOn;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -153,42 +159,59 @@ namespace Kindred.Base
             
             spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
 
-            var intensity = 1f;
-            var lightColor = Color.White * intensity;
-            var pp = GraphicsDevice.PresentationParameters;
+            
             spriteBatch.FillRectangle(Dependencies.GetCamera().GetScreenRectf(), Color.White * .3f);
             spriteBatch.End();
-            BlendState blend = new BlendState();
-            
-            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive, effect: effect2);
 
-            effect2.Parameters["innerRadius"].SetValue(0f);
-            effect2.Parameters["innerIntensity"].SetValue(3.5f);
-            effect2.Parameters["inputIntensity"].SetValue(.3f);
-            effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
-            Texture2D mask = bayerMask;
-            effect2.Parameters["bayerMask"].SetValue(mask);
-            spriteBatch.FillRectangle(new RectangleF(100, 100, 64, 64), Color.White);
-            spriteBatch.End();
-
-            for (int x = 0; x < 10; x++)
+            if (maskOn)
             {
-                for (int y = 0; y < 10; y++)
-                {
-                    Texture2D mask2 = bayerMask;
-                    spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive, effect: effect2);
+                spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive);
 
-                    effect2.Parameters["innerRadius"].SetValue(0f);
-                    effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                    effect2.Parameters["inputIntensity"].SetValue(.3f);
-                    effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
-                    effect2.Parameters["bayerMask"].SetValue(mask2);
-                    spriteBatch.FillRectangle(new RectangleF(x * 64, y * 64, 128, 128), Color.White);
-                    spriteBatch.End();
-                }
+                effect2.Parameters["innerRadius"].SetValue(1.3f);
+                effect2.Parameters["innerIntensity"].SetValue(3.5f);
+                effect2.Parameters["inputIntensity"].SetValue(.3f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
+                effect2.Parameters["bayerMask"].SetValue(bayerMask);
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
+                effect2.Parameters["inputIntensity"].SetValue(.5f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 0, 0));
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(0, 100, 320, 320), Color.White);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(48, 0, 211));
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(100, 150, 320, 320), Color.White);
+                spriteBatch.End();
             }
+            else
+            {
+                spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive);
 
+                effect2.Parameters["innerRadius"].SetValue(1.3f);
+                effect2.Parameters["innerIntensity"].SetValue(3.5f);
+                effect2.Parameters["inputIntensity"].SetValue(.3f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
+                effect2.Parameters["bayerMask"].SetValue(lowRezMask);
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
+                effect2.Parameters["inputIntensity"].SetValue(.5f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 0, 0));
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(0, 100, 320, 320), Color.White);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(48, 0, 211));
+                effect2.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.FillRectangle(new RectangleF(100, 150, 320, 320), Color.White);
+                spriteBatch.End();
+            }
             
+
+           
+
+
+
+
 
             //spriteBatch.End();
 
