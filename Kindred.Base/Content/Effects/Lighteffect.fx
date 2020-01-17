@@ -7,7 +7,7 @@
       
    float4 PixelShaderLight(float2 coords: TEXCOORD0) : COLOR0  
     {  
-		float4 color = tex2D(s0, coords);  
+		float4 color = tex2D(s0, coords.xy);  
         float4 lightColor = tex2D(lightSampler, coords);  
 		return color * lightColor;  
     }  
@@ -20,3 +20,4 @@
             PixelShader = compile ps_2_0 PixelShaderLight();  
         }  
     }  
+

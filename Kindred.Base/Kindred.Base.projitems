@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\LightSystem\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Map.cs" />
@@ -39,5 +40,8 @@
     <Content Include="$(MSBuildThisFileDirectory)Content\Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Scene\" />
   </ItemGroup>
 </Project>

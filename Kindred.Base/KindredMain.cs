@@ -26,6 +26,7 @@ namespace Kindred.Base
         public static Effect effect2;
         RenderTarget2D lightsTarget;
         RenderTarget2D mainTarget;
+        public static Texture2D bayerMask;
         public KindredMain()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -73,6 +74,7 @@ namespace Kindred.Base
             effect2 = Content.Load<Effect>(@"Effects\radialGradient");
             lightMask = Assets.GetTexture("lightmask");
             effect1 = Content.Load<Effect>(@"Effects\lighteffect");
+            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix");
 
             // TODO: use this.Content to load your game content here
         }
@@ -145,11 +147,50 @@ namespace Kindred.Base
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             GraphicsDevice.SetRenderTarget(lightsTarget);
-            GraphicsDevice.Clear(Color.Black);
+            //GraphicsDevice.Clear(Color.Black);
 
+
+            
             spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
-            spriteBatch.Draw(lightMask, new Vector2(100,100), new Color(Color.White, 0.5f));
+
+            var intensity = 1f;
+            var lightColor = Color.White * intensity;
+            var pp = GraphicsDevice.PresentationParameters;
+            spriteBatch.FillRectangle(Dependencies.GetCamera().GetScreenRectf(), Color.White * .3f);
             spriteBatch.End();
+            BlendState blend = new BlendState();
+            
+            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive, effect: effect2);
+
+            effect2.Parameters["innerRadius"].SetValue(0f);
+            effect2.Parameters["innerIntensity"].SetValue(3.5f);
+            effect2.Parameters["inputIntensity"].SetValue(.3f);
+            effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
+            Texture2D mask = bayerMask;
+            effect2.Parameters["bayerMask"].SetValue(mask);
+            spriteBatch.FillRectangle(new RectangleF(100, 100, 64, 64), Color.White);
+            spriteBatch.End();
+
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    Texture2D mask2 = bayerMask;
+                    spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, blendState: BlendState.Additive, effect: effect2);
+
+                    effect2.Parameters["innerRadius"].SetValue(0f);
+                    effect2.Parameters["innerIntensity"].SetValue(3.5f);
+                    effect2.Parameters["inputIntensity"].SetValue(.3f);
+                    effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
+                    effect2.Parameters["bayerMask"].SetValue(mask2);
+                    spriteBatch.FillRectangle(new RectangleF(x * 64, y * 64, 128, 128), Color.White);
+                    spriteBatch.End();
+                }
+            }
+
+            
+
+            //spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(mainTarget);
             GraphicsDevice.Clear(Color.Transparent);
@@ -160,9 +201,9 @@ namespace Kindred.Base
             GraphicsDevice.Clear(Color.Black);
 
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: effect1);
             effect1.Parameters["lightMask"].SetValue(lightsTarget);
-            effect1.CurrentTechnique.Passes[0].Apply();
+            //effect1.CurrentTechnique.Passes[0].Apply();
             spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
              
             spriteBatch.End();

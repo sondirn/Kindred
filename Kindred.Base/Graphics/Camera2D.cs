@@ -3,6 +3,7 @@ using Kindred.Base.Utils;
 using Kindred.Base.Utils.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 
 namespace Kindred.Base.Graphics
 {
@@ -75,6 +76,22 @@ namespace Kindred.Base.Graphics
         public Vector2 ToWorld(Vector2 screenPosition)
         {
             return Vector2.Transform(screenPosition, Camera.ViewportOffset.Absolute);
+        }
+
+        public RectangleF GetScreenRectf()
+        {
+            if (Camera.Zoom > 1)
+            {
+                return new RectangleF(((Camera.Position.X) - (Camera.Width / 2f)), ((Camera.Position.Y) - (Camera.Height / 2f)), (Camera.Width), (Camera.Height));
+            }
+            else
+            {
+                var regWidth = Camera.Width;
+                var regHeight = Camera.Height;
+                var newHeight = regHeight * (1 / Camera.Zoom);
+                var newWidth = regWidth * (1 / Camera.Zoom);
+                return new RectangleF(((Camera.Position.X - ((newWidth - regWidth) / 2)) - (Camera.Width / 2f)), ((Camera.Position.Y - ((newHeight - regHeight) / 2)) - (Camera.Height / 2f)), (newWidth), (newHeight));
+            }
         }
 
         public Rectangle GetScreenRect()
