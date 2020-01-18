@@ -25,7 +25,6 @@ namespace Kindred.Base
         public static Texture2D lightMask;
         public static Effect effect1;
         public static Effect effect2;
-        RenderTarget2D lightsTarget;
         RenderTarget2D mainTarget;
         public static Texture2D bayerMask;
         public static Texture2D lowRezMask;
@@ -36,7 +35,7 @@ namespace Kindred.Base
             Content.RootDirectory = "Content";
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
-            scene = new Scene();
+            
         }
 
         /// <summary>
@@ -59,9 +58,10 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            scene.Initialize(GraphicsDevice);
+            scene = new Scene(GraphicsDevice);
+            scene.Initialize();
             var pp = GraphicsDevice.PresentationParameters;
-            lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            
             mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
         }
 
@@ -122,7 +122,7 @@ namespace Kindred.Base
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
                     graphics.ApplyChanges();
                     var pp = GraphicsDevice.PresentationParameters;
-                    lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+                    scene.lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                     mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                 }
                 else
@@ -131,7 +131,7 @@ namespace Kindred.Base
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height /2;
                     graphics.ApplyChanges();
                     var pp = GraphicsDevice.PresentationParameters;
-                    lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+                    scene.lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                     mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
                 } 
             }
@@ -151,17 +151,8 @@ namespace Kindred.Base
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
-            
-            GraphicsDevice.SetRenderTarget(lightsTarget);
-            //GraphicsDevice.Clear(Color.Black);
 
-
-            
-            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
-
-            
-            spriteBatch.FillRectangle(Dependencies.GetCamera().GetScreenRectf(), Color.White * .3f);
-            spriteBatch.End();
+            scene.DrawLights(spriteBatch);
 
             if (maskOn)
             {
@@ -169,11 +160,11 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(.3f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
-                effect2.Parameters["bayerMask"].SetValue(bayerMask);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 240));
+                effect2.Parameters["bayerMask"].SetValue(lowRezMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
+                spriteBatch.FillRectangle(new RectangleF(50 - (64 / 2), 50 -(64 / 2), 64, 64), Color.White);
  
                 spriteBatch.End();
             }
@@ -183,11 +174,11 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(.3f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
-                effect2.Parameters["bayerMask"].SetValue(lowRezMask);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 240));
+                effect2.Parameters["bayerMask"].SetValue(bayerMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
+                spriteBatch.FillRectangle(new RectangleF(50 - (320 / 2), 50 - (320 / 2), 320, 320), Color.White);
                 
                 spriteBatch.End();
             }
@@ -204,14 +195,14 @@ namespace Kindred.Base
             GraphicsDevice.SetRenderTarget(mainTarget);
             GraphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-            scene.Draw(spriteBatch);
+            scene.DrawScene(spriteBatch);
             spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
 
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: effect1);
-            effect1.Parameters["lightMask"].SetValue(lightsTarget);
+            effect1.Parameters["lightMask"].SetValue(scene.lightsTarget);
             //effect1.CurrentTechnique.Passes[0].Apply();
             spriteBatch.Draw(mainTarget, Vector2.Zero, Color.White);
              
