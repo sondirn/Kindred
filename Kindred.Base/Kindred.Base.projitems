@@ -23,7 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledTileSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSetsData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Scene\Room.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Dependencies.cs" />

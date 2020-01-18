@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using Kindred.Base.Scene;
+
 using System;
 
 namespace Kindred.Base
@@ -21,7 +21,7 @@ namespace Kindred.Base
         SpriteBatch spriteBatch;
         public Assets assets;
         public Dependencies dependencies;
-        
+        public Scene scene;
         public static Texture2D lightMask;
         public static Effect effect1;
         public static Effect effect2;
@@ -36,7 +36,7 @@ namespace Kindred.Base
             Content.RootDirectory = "Content";
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
-            scene
+            scene = new Scene();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            
+            scene.Initialize(GraphicsDevice);
             var pp = GraphicsDevice.PresentationParameters;
             lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -169,7 +169,7 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputIntensity"].SetValue(.3f);
                 effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
                 effect2.Parameters["bayerMask"].SetValue(bayerMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
@@ -183,7 +183,7 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(1f);
+                effect2.Parameters["inputIntensity"].SetValue(.3f);
                 effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
                 effect2.Parameters["bayerMask"].SetValue(lowRezMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
@@ -204,7 +204,7 @@ namespace Kindred.Base
             GraphicsDevice.SetRenderTarget(mainTarget);
             GraphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-            mRenderer.Draw(spriteBatch);
+            scene.Draw(spriteBatch);
             spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);

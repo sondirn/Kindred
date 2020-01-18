@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kindred.Base.Room
+namespace Kindred.Base
 {
-    public class Room
+    public class Scene
     {
         private readonly MapRenderer mRenderer;
-        public Room()
+
+        public Scene()
         {
             mRenderer = new MapRenderer();
         }
@@ -19,6 +20,11 @@ namespace Kindred.Base.Room
         {
             Dependencies.CreateCamera(gd);
             Dependencies.GenerateMap("Dungeon1");
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            mRenderer.Draw(spriteBatch);
         }
     }
 }
