@@ -12,6 +12,8 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Position.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystems\LightsSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\LightSystem\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
@@ -41,5 +43,8 @@
     <Content Include="$(MSBuildThisFileDirectory)Content\Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\" />
   </ItemGroup>
 </Project>

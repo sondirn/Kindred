@@ -6,10 +6,12 @@ using System.Text;
 
 namespace Kindred.Base.Graphics.LightSystem
 {
-    public abstract class Light
+    public class Light
     {
-        public Texture2D LUTAsset { get; set; }
+        public string BayerMask { get; set; }
+        public int Radius { get; set; }
         public float Intensity { get; set; }
-        public Color LightColor { get; set; }
+        public Vector3 Color { get; set; }
+        public Vector2 Position { get; set; }
     }
 }

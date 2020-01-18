@@ -9,6 +9,7 @@ namespace Kindred.Base.Utils
     {
         private static Camera2D camera;
         private static Map map;
+        private static SpriteBatch sb;
 
         public Dependencies()
         {
@@ -20,7 +21,7 @@ namespace Kindred.Base.Utils
         {
             camera = new Camera2D(graphics, 640, 360, Comora.AspectMode.FillStretch);
             camera.LoadContent();
-            camera.Camera.Zoom = 2f;
+            camera.Camera.Zoom = 1f;
             camera.AddDebugLines(
                 new int[]
                 {
@@ -59,5 +60,14 @@ namespace Kindred.Base.Utils
         }
 
         #endregion Map Functions
+        public static void SetSpriteBatch(SpriteBatch _sb)
+        {
+            sb = _sb;
+        }
+
+        public static SpriteBatch GetSB()
+        {
+            return sb;
+        }
     }
 }

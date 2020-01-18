@@ -1,6 +1,7 @@
 ﻿using Kindred.Base.Maps.Utils;
 using Kindred.Base.Utils;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -14,6 +15,7 @@ namespace Kindred.Base.Maps
         public int TileHeight { get; set; }
         public Layer[] Layers { get; set; }
         public Texture2D[] TileArray { get; set; }
+        public string[] TileSetNames { get; set; }
         public string Name { get; set; }
 
         private void FillMap(TiledMapData data)
@@ -28,9 +30,11 @@ namespace Kindred.Base.Maps
                 Layers[i].FillData(data.Layers[i]);
             }
             var tempdata = new List<Texture2D>();
+            TileSetNames = new string[data.TileSets.Length];
             for (int i = 0; i < data.TileSets.Length; i++)
             {
                 Assets.AddTexture(data.TileSets[i].Name);
+                TileSetNames[i] = data.TileSets[i].Name;
                 tempdata.AddRange(Common.Split(Assets.GetTexture(data.TileSets[i].Name), TileWidth, TileHeight));
             }
             TileArray = new Texture2D[tempdata.Count];
@@ -41,18 +45,30 @@ namespace Kindred.Base.Maps
 
         public void GenerateMap(string mapName)
         {
-            //MapLoader.GenerateMap(this, mapName);
+            if(Name == mapName)
+            {
+                Console.WriteLine("Map: " + mapName + " Is Already Loaded");
+                return;
+            }
+            
             if(Layers != null)
             {
+                TileArray = null;
                 foreach (Layer layer in Layers)
                 {
                     layer.Dispose();
-                    System.GC.Collect();
+                    
                 }
+                foreach (string tileSet in TileSetNames)
+                {
+                    Assets.RemoveTexture(tileSet);
+                }
+                System.GC.Collect();
             }
             
             Name = mapName;
             FillMap(JsonDeserialize.DeserializeJSON<TiledMapData>(mapName + ".Json"));
+            Console.WriteLine("Map " + mapName + "Has Loaded");
         }
     }
 }

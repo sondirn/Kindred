@@ -35,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Effects/BayerMatrix.png
+/build:Effects/BayerMatrix.png;Effects/BayerMatrix1024.png
 
 #begin Effects/BayerMatrix2048.png
 /importer:TextureImporter
@@ -84,6 +84,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Effects/BayerMatrix512.png
+
+#begin Effects/File.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/File.fx
 
 #begin Effects/Lighteffect.fx
 /importer:EffectImporter
