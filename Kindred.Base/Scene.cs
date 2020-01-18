@@ -20,6 +20,7 @@ namespace Kindred.Base
         private readonly GraphicsDevice gd;
         private World _world;
         private Entity entity;
+        private Entity entity2;
         SpriteBatch sb;
         private Texture2D mask;
 
@@ -33,19 +34,31 @@ namespace Kindred.Base
             mRenderer = new MapRenderer();
             _world = new WorldBuilder().AddSystem(new LightsSystem(gd)).Build();
             entity = _world.CreateEntity();
+            entity2 = _world.CreateEntity();
             entity.Attach(new Light
             {
                 BayerMask = "BayerMatrix1024",
                 Radius = 128,
-                Intensity = 1,
-                Color = new Vector3(255, 255, 255),
+                Intensity = .5f,
+                Color = new Vector3(255, 0, 0),
             });
             entity.Attach(new Position2D
             {
                 Position = new Vector2(100, 100)
             });
-            
-           
+            entity2.Attach(new Light
+            {
+                BayerMask = "BayerMatrix1024",
+                Radius = 128,
+                Intensity = .5f,
+                Color = new Vector3(255, 255, 255),
+            });
+            entity2.Attach(new Position2D
+            {
+                Position = new Vector2(132, 132)
+            });
+
+
         }
         public void Initialize()
         {
@@ -58,6 +71,8 @@ namespace Kindred.Base
         public void Update(GameTime gameTime)
         {
             _world.Update(gameTime);
+           // entity.Get<Position2D>().Position += new Vector2(.5f, .5f);
+            Console.WriteLine(entity.Get<Position2D>().Position);
             Console.WriteLine(_world.EntityCount);
         }
 
@@ -65,7 +80,7 @@ namespace Kindred.Base
         {
             //gd.SetRenderTarget(Assets.GetRenderTarget("LightsTarget"));
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
-            Dependencies.GetSB().FillRectangle(Dependencies.GetCamera().GetScreenRectf(), new Color(255,255,255) * .5f);
+            Dependencies.GetSB().FillRectangle(Dependencies.GetCamera().GetScreenRectf(), new Color(255,255,255) * .3f);
             Dependencies.GetSB().End();
             
         }
@@ -73,9 +88,7 @@ namespace Kindred.Base
         public void DrawScene(GameTime gameTime, SpriteBatch spriteBatch)
         {
             gd.SetRenderTarget(Assets.GetRenderTarget("LightsTarget"));
-            Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
             
-            Dependencies.GetSB().End();
             DrawLights(gameTime, spriteBatch);
             _world.Draw(gameTime);
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);

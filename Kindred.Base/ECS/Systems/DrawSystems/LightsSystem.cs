@@ -29,23 +29,23 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
         }
         public override void Draw(GameTime gameTime)
         {
-            Assets.AddTexture(@"Effects\BayerMatrix2048");
-            mask = Assets.GetTexture(@"Effects\BayerMatrix2048");
+            
 
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp);
             foreach (var entity in ActiveEntities)
             {
+                var light = GetEntity(entity).Get<Light>();
+                var position = GetEntity(entity).Get<Position2D>();
                 var e = Assets.GetEffect(EffectType.PointLight);
-                e.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
-                e.Parameters["inputIntensity"].SetValue(.5f);
+                e.Parameters["inputColor"].SetValue(light.Color);
+                e.Parameters["inputIntensity"].SetValue(light.Intensity);
                 e.Parameters["innerRadius"].SetValue(0f);
                 e.Parameters["innerIntensity"].SetValue(0f);
-                e.Parameters["bayerMask"].SetValue(mask);
+                //e.Parameters["bayerMask"].SetValue(mask);
                 e.CurrentTechnique.Passes[0].Apply();
-                Dependencies.GetSB().FillRectangle(new RectangleF(0, 0, 360, 360), Color.White);
-                e.Parameters["inputColor"].SetValue(new Vector3(255, 0, 0));
-                e.CurrentTechnique.Passes[0].Apply();
-                Dependencies.GetSB().FillRectangle(new RectangleF(50, 50, 360, 360), Color.White);
+                Dependencies.GetSB().FillRectangle(new RectangleF(position.Position.X - (light.Radius / 2), position.Position.Y - (light.Radius / 2), light.Radius, light.Radius), Color.White);
+                //Console.WriteLine(light.Position);
+                
             }
             Dependencies.GetSB().End();
             gd.SetRenderTarget(Assets.GetRenderTarget("MainTarget"));

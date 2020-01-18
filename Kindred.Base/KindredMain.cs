@@ -167,9 +167,9 @@ namespace Kindred.Base
 
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            //Assets.GetEffect(EffectType.LightMultiplication).Parameters["lightMask"].SetValue(Assets.GetRenderTarget("LightsTarget"));
-            //Assets.GetEffect(EffectType.LightMultiplication).CurrentTechnique.Passes[0].Apply();
-            spriteBatch.Draw(Assets.GetRenderTarget("LightsTarget"), Vector2.Zero, Color.White);
+            Assets.GetEffect(EffectType.LightMultiplication).Parameters["lightMask"].SetValue(Assets.GetRenderTarget("LightsTarget"));
+            Assets.GetEffect(EffectType.LightMultiplication).CurrentTechnique.Passes[0].Apply();
+            spriteBatch.Draw(Assets.GetRenderTarget("MainTarget"), Vector2.Zero, Color.White);
              
             spriteBatch.End();
 
