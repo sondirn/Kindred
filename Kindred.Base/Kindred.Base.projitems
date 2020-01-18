@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TiledTileSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Utils\TileSetsData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scene\Room.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Dependencies.cs" />
@@ -40,8 +41,5 @@
     <Content Include="$(MSBuildThisFileDirectory)Content\Test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Scene\" />
   </ItemGroup>
 </Project>

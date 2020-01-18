@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using Kindred.Base.Scene;
 using System;
 
 namespace Kindred.Base
@@ -20,7 +21,7 @@ namespace Kindred.Base
         SpriteBatch spriteBatch;
         public Assets assets;
         public Dependencies dependencies;
-        readonly MapRenderer mRenderer;
+        
         public static Texture2D lightMask;
         public static Effect effect1;
         public static Effect effect2;
@@ -35,7 +36,7 @@ namespace Kindred.Base
             Content.RootDirectory = "Content";
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
-            mRenderer = new MapRenderer();
+            scene
         }
 
         /// <summary>
@@ -58,8 +59,7 @@ namespace Kindred.Base
             graphics.ApplyChanges();
             //Inject Dependencies
             dependencies = new Dependencies();
-            Dependencies.CreateCamera(GraphicsDevice);
-            Dependencies.GenerateMap("MapTest");
+            
             var pp = GraphicsDevice.PresentationParameters;
             lightsTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
             mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -77,8 +77,8 @@ namespace Kindred.Base
             effect2 = Content.Load<Effect>(@"Effects\radialGradient");
             lightMask = Assets.GetTexture("lightmask");
             effect1 = Content.Load<Effect>(@"Effects\lighteffect");
-            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix2048");
-            lowRezMask = Content.Load<Texture2D>(@"Effects\BayerMatrix2x2");
+            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix");
+            lowRezMask = Content.Load<Texture2D>(@"Effects\BayerMatrix256");
 
             // TODO: use this.Content to load your game content here
         }
@@ -169,19 +169,12 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(.3f);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
                 effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
                 effect2.Parameters["bayerMask"].SetValue(bayerMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
                 spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
-                effect2.Parameters["inputIntensity"].SetValue(.5f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 0, 0));
-                effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(0, 100, 320, 320), Color.White);
-                effect2.Parameters["inputIntensity"].SetValue(1f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(48, 0, 211));
-                effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(100, 150, 320, 320), Color.White);
+ 
                 spriteBatch.End();
             }
             else
@@ -190,19 +183,12 @@ namespace Kindred.Base
 
                 effect2.Parameters["innerRadius"].SetValue(1.3f);
                 effect2.Parameters["innerIntensity"].SetValue(3.5f);
-                effect2.Parameters["inputIntensity"].SetValue(.3f);
+                effect2.Parameters["inputIntensity"].SetValue(1f);
                 effect2.Parameters["inputColor"].SetValue(new Vector3(255, 255, 255));
                 effect2.Parameters["bayerMask"].SetValue(lowRezMask);
                 effect2.CurrentTechnique.Passes[0].Apply();
                 spriteBatch.FillRectangle(new RectangleF(100, 100, 320, 320), Color.White);
-                effect2.Parameters["inputIntensity"].SetValue(.5f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(255, 0, 0));
-                effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(0, 100, 320, 320), Color.White);
-                effect2.Parameters["inputIntensity"].SetValue(1f);
-                effect2.Parameters["inputColor"].SetValue(new Vector3(48, 0, 211));
-                effect2.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.FillRectangle(new RectangleF(100, 150, 320, 320), Color.White);
+                
                 spriteBatch.End();
             }
             
