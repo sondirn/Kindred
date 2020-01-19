@@ -39,10 +39,12 @@ namespace Kindred.Base.Utils
             effects = new Dictionary<EffectType, Effect>();
             effects.Add(EffectType.PointLight, content.Load<Effect>(@"Effects\radialGradient"));
             effects.Add(EffectType.LightMultiplication, content.Load<Effect>(@"Effects\lighteffect"));
+            effects.Add(EffectType.File, content.Load<Effect>(@"Effects\File"));
         }
 
         public static Texture2D GetTexture(string name)
         {
+            
             return textures[name];
         }
 
@@ -115,5 +117,6 @@ namespace Kindred.Base.Utils
 public enum EffectType
 {
     PointLight,
-    LightMultiplication
+    LightMultiplication,
+    File
 }

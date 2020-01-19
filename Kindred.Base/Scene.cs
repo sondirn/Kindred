@@ -38,10 +38,12 @@ namespace Kindred.Base
             entity.Attach(new Light
             {
                 BayerMask = "BayerMatrix1024",
-                Radius = 128,
-                Intensity = .5f,
+                Radius = 364,
+                Intensity = 1f,
                 Color = new Vector3(255, 0, 0),
-            });
+                InnerIntensity = 2,
+                InnerRadius = 1
+            }) ;
             entity.Attach(new Position2D
             {
                 Position = new Vector2(100, 100)
@@ -49,9 +51,11 @@ namespace Kindred.Base
             entity2.Attach(new Light
             {
                 BayerMask = "BayerMatrix1024",
-                Radius = 128,
-                Intensity = .5f,
+                Radius = 364,
+                Intensity = .7f,
                 Color = new Vector3(255, 255, 255),
+                InnerIntensity = 2,
+                InnerRadius = 1
             });
             entity2.Attach(new Position2D
             {

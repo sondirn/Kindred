@@ -7,40 +7,31 @@
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-matrix WorldViewProjection;
+sampler s0;
 
-struct VertexShaderInput
+texture bayerMask;
+sampler bayerSampler : register(s1) = sampler_state {Texture = <bayerMask>;};
+float Intensity;
+float3 inputColor;
+
+float4 main(float2 uv: TEXCOORD0) : SV_TARGET
 {
-	float4 Position : POSITION0;
-	float4 Color : COLOR0;
-};
-
-struct VertexShaderOutput
-{
-	float4 Position : SV_POSITION;
-	float4 Color : COLOR0;
-};
-
-VertexShaderOutput MainVS(in VertexShaderInput input)
-{
-	VertexShaderOutput output = (VertexShaderOutput)0;
-
-	output.Position = mul(input.Position, WorldViewProjection);
-	output.Color = input.Color;
-
-	return output;
+	float3 trueColor = inputColor / 255;
+	float4 color = tex2D(s0, uv.xy);
+	float4 bayerColor = tex2D(bayerSampler, uv).r / 32 - (1/128);
+	float4 diff = float4(1,1,1,1) / float4 (trueColor,1);
+	float4 finalColor = color / diff;
+	finalColor += bayerColor;
+	finalColor = finalColor * Intensity;
+	finalColor = clamp(finalColor, 0, 1);
+	return finalColor;
 }
 
-float4 MainPS(VertexShaderOutput input) : COLOR
+technique Technique1
 {
-	return input.Color;
-}
-
-technique BasicColorDrawing
-{
-	pass P0
+	pass
 	{
-		VertexShader = compile VS_SHADERMODEL MainVS();
-		PixelShader = compile PS_SHADERMODEL MainPS();
+		PixelShader = compile PS_SHADERMODEL main();
 	}
-};
+}
+

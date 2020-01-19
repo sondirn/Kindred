@@ -9,7 +9,8 @@
     {  
 		float4 color = tex2D(s0, coords.xy);  
         float4 lightColor = tex2D(lightSampler, coords);  
-		return color * (lightColor * 2);  
+        lightColor = clamp(lightColor, 0, 1);
+		return color * (lightColor * 1.3);  
     }  
 
 	      

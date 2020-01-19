@@ -19,7 +19,10 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
         private readonly SpriteBatch spriteBatch;
         private ComponentMapper _lightMapper;
         private ComponentMapper _position2DMapper;
-        private Texture2D mask;
+
+        //TestVaiables
+        
+        
         public LightsSystem(GraphicsDevice graphicsDevice)
             : base(Aspect.All(typeof(Light), typeof(Position2D)))
         {
@@ -29,23 +32,23 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
         }
         public override void Draw(GameTime gameTime)
         {
-            
-
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp);
             foreach (var entity in ActiveEntities)
             {
+                Assets.AddTexture(@"Effects\BayerMatrix2048");
+                var mask = Assets.GetTexture(@"Effects\BayerMatrix2048");
                 var light = GetEntity(entity).Get<Light>();
                 var position = GetEntity(entity).Get<Position2D>();
                 var e = Assets.GetEffect(EffectType.PointLight);
                 e.Parameters["inputColor"].SetValue(light.Color);
                 e.Parameters["inputIntensity"].SetValue(light.Intensity);
-                e.Parameters["innerRadius"].SetValue(0f);
-                e.Parameters["innerIntensity"].SetValue(0f);
-                //e.Parameters["bayerMask"].SetValue(mask);
+                e.Parameters["innerRadius"].SetValue(light.InnerRadius);
+                e.Parameters["innerIntensity"].SetValue(light.InnerIntensity);
+                e.Parameters["bayerMask"].SetValue(mask);
                 e.CurrentTechnique.Passes[0].Apply();
                 Dependencies.GetSB().FillRectangle(new RectangleF(position.Position.X - (light.Radius / 2), position.Position.Y - (light.Radius / 2), light.Radius, light.Radius), Color.White);
                 //Console.WriteLine(light.Position);
-                
+
             }
             Dependencies.GetSB().End();
             gd.SetRenderTarget(Assets.GetRenderTarget("MainTarget"));
