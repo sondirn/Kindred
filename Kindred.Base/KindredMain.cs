@@ -22,9 +22,7 @@ namespace Kindred.Base
         public Assets assets;
         public Dependencies dependencies;
         public Scene scene;
-        public static Texture2D bayerMask;
-        public static Texture2D lowRezMask;
-        private bool maskOn;
+        
         public KindredMain()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -32,6 +30,8 @@ namespace Kindred.Base
             graphics.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = false;
             assets = new Assets();
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += OnResize;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Kindred.Base
         {
             Console.WriteLine(Common.DisplayVersion);
            
-            maskOn = false;
+            
             // TODO: Add your initialization logic here
             IsMouseVisible = true;
             base.Initialize();
@@ -74,9 +74,8 @@ namespace Kindred.Base
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             Assets.LoadContent(Content, GraphicsDevice);
-            Assets.AddTexture("lightmask");
-            bayerMask = Content.Load<Texture2D>(@"Effects\BayerMatrix1024");
-            lowRezMask = Content.Load<Texture2D>(@"Effects\BayerMatrix256");
+            
+            
 
             // TODO: use this.Content to load your game content here
         }
@@ -98,14 +97,14 @@ namespace Kindred.Base
         protected override void Update(GameTime gameTime)
         {
             scene.Update(gameTime);
+            
             Assets.Update(GraphicsDevice);  
             KeyboardInput.Update();
             if (KeyboardInput.WasKeyJustDown(Keys.I))
                 Dependencies.GenerateMap("Dungeon1");
             if (KeyboardInput.WasKeyJustDown(Keys.P))
                 Dependencies.GenerateMap("MapTest");
-            if (KeyboardInput.WasKeyJustDown(Keys.J))
-                maskOn = !maskOn;
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -120,7 +119,7 @@ namespace Kindred.Base
                     graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
                     graphics.ApplyChanges();
-                   
+                    Dependencies.GetCamera().Resize(graphics);
                     Assets.ResizeRenderTargets2D("LightsTarget");
                     Assets.ResizeRenderTargets2D("MainTarget");
                 }
@@ -129,7 +128,7 @@ namespace Kindred.Base
                     graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width /2;
                     graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height /2;
                     graphics.ApplyChanges();
-                    
+                    Dependencies.GetCamera().Resize(graphics);
                     Assets.ResizeRenderTargets2D("LightsTarget");
                     Assets.ResizeRenderTargets2D("MainTarget");
                     //mainTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
@@ -168,6 +167,12 @@ namespace Kindred.Base
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        protected virtual void OnResize(Object sender, EventArgs e)
+        {
+            
+            Dependencies.GetCamera().Resize(graphics);
         }
     }
 }

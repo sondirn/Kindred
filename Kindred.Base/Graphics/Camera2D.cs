@@ -22,6 +22,9 @@ namespace Kindred.Base.Graphics
                 Camera.Position = value;
             }
         }
+
+        public object Logger { get; private set; }
+
         public Camera2D(GraphicsDevice device, int cWidth, int cHeight, AspectMode cAspect = AspectMode.Expand)
         {
             Camera = new Camera(device)
@@ -126,6 +129,17 @@ namespace Kindred.Base.Graphics
             ScreenBounds.EndY /= map.TileHeight;
             ScreenBounds.EndX += 1;
             ScreenBounds.EndY += 1;
+        }
+
+        public void Resize(GraphicsDeviceManager graphics)
+        {
+            var gd = Assets.GetGraphicsDevice().PresentationParameters;
+            float aspectRatio = (float)gd.BackBufferWidth / (float)gd.BackBufferHeight;
+            Camera.Width = Camera.Height * aspectRatio;
+            Assets.ResizeRenderTargets2D("LightsTarget");
+            Assets.ResizeRenderTargets2D("MainTarget");
+            Utils.Logger.WriteLine(WarningLevel.High, aspectRatio.ToString());
+            
         }
     }
 

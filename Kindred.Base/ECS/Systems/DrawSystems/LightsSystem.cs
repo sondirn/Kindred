@@ -31,7 +31,7 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
         }
         public override void Draw(GameTime gameTime)
         {
-            Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp);
+            spriteBatch.Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp);
             foreach (var entity in ActiveEntities)
             {
                 
@@ -44,11 +44,11 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
                 e.Parameters["innerIntensity"].SetValue(light.InnerIntensity);
                 //e.Parameters["bayerMask"].SetValue(mask);
                 e.CurrentTechnique.Passes[0].Apply();
-                Dependencies.GetSB().FillRectangle(new RectangleF(position.Position.X - (light.Radius / 2), position.Position.Y - (light.Radius / 2), light.Radius, light.Radius), Color.White);
+                spriteBatch.FillRectangle(new RectangleF(position.Position.X - (light.Radius / 2), position.Position.Y - (light.Radius / 2), light.Radius, light.Radius), Color.White);
                 //Console.WriteLine(light.Position);
 
             }
-            Dependencies.GetSB().End();
+            spriteBatch.End();
             gd.SetRenderTarget(Assets.GetRenderTarget("MainTarget"));
         }
 

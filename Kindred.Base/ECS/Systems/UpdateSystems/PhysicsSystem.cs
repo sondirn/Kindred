@@ -32,8 +32,7 @@ namespace Kindred.Base.ECS.Systems.UpdateSystems
                 var rigidBody = _rigidBody.Get(entity);
 
                 transform.Position += rigidBody.Velocity;
-                Logger.WriteLine(WarningLevel.Medium, transform.Position.ToString());
-                Logger.WriteLine(WarningLevel.Urgent, entity.ToString());
+                
             }
         }
     }

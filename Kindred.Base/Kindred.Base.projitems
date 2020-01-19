@@ -12,14 +12,16 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Position.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\RigidBody.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystems\LightsSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystems\SpriteSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\PhysicsSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\PlayerControllerSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Map.cs" />
