@@ -1,7 +1,7 @@
 ﻿using Comora;
 using Kindred.Base.ECS.Components;
 using Kindred.Base.ECS.Systems.DrawSystems;
-using Kindred.Base.Graphics.LightSystem;
+using Kindred.Base.ECS.Systems.UpdateSystems;
 using Kindred.Base.Maps;
 using Kindred.Base.Utils;
 using Microsoft.Xna.Framework;
@@ -22,7 +22,9 @@ namespace Kindred.Base
         private Entity entity;
         private Entity entity2;
         SpriteBatch sb;
-        private Texture2D mask;
+        private Entity player;
+        private float brigthness = .01f;
+        private bool brightnessUp = true;
 
         //ToBeRemoved
 
@@ -32,10 +34,12 @@ namespace Kindred.Base
             gd = _gd;
             sb = new SpriteBatch(gd);
             mRenderer = new MapRenderer();
-            _world = new WorldBuilder().AddSystem(new LightsSystem(gd)).Build();
+            _world = new WorldBuilder().AddSystem(new LightsSystem(gd))
+                .AddSystem(new PlayerControllerSystem())
+                .AddSystem(new PhysicsSystem()).Build();
             entity = _world.CreateEntity();
             entity2 = _world.CreateEntity();
-            entity.Attach(new Light
+            entity.Attach(new LightComponent
             {
                 BayerMask = "BayerMatrix1024",
                 Radius = 364,
@@ -44,11 +48,11 @@ namespace Kindred.Base
                 InnerIntensity = 2,
                 InnerRadius = 1
             }) ;
-            entity.Attach(new Position2D
+            entity.Attach(new TransformComponent
             {
                 Position = new Vector2(100, 100)
             });
-            entity2.Attach(new Light
+            entity2.Attach(new LightComponent
             {
                 BayerMask = "BayerMatrix1024",
                 Radius = 364,
@@ -57,11 +61,23 @@ namespace Kindred.Base
                 InnerIntensity = 2,
                 InnerRadius = 1
             });
-            entity2.Attach(new Position2D
+            entity2.Attach(new TransformComponent
             {
                 Position = new Vector2(132, 132)
             });
-
+            player = _world.CreateEntity();
+            player.Attach(new TransformComponent
+            {
+                Position = new Vector2(50, 50)
+            });
+            player.Attach(new PlayerControllerComponent
+            {
+                
+            });
+            player.Attach(new RigidBody
+            {
+                Velocity = new Vector2(0, 0)
+            });
 
         }
         public void Initialize()
@@ -69,22 +85,29 @@ namespace Kindred.Base
             Dependencies.CreateCamera(gd);
             Dependencies.GenerateMap("Dungeon1");
             Assets.AddTexture(@"Effects\BayerMatrix2048");
-            mask = Assets.GetTexture(@"Effects\BayerMatrix2048");
+            _world.Initialize();
+            
         }
 
         public void Update(GameTime gameTime)
         {
             _world.Update(gameTime);
-           // entity.Get<Position2D>().Position += new Vector2(.5f, .5f);
-            Console.WriteLine(entity.Get<Position2D>().Position);
-            Console.WriteLine(_world.EntityCount);
+            if(brightnessUp)
+                brigthness += .25f * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            if (!brightnessUp)
+                brigthness -= .25f * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+            if (brigthness >= 2f)
+                brightnessUp = false;
+            if (brigthness <= -1f)
+                brightnessUp = true;
+            
         }
 
         public void DrawLights(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //gd.SetRenderTarget(Assets.GetRenderTarget("LightsTarget"));
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive);
-            Dependencies.GetSB().FillRectangle(Dependencies.GetCamera().GetScreenRectf(), new Color(255,255,255) * .3f);
+            Dependencies.GetSB().FillRectangle(Dependencies.GetCamera().GetScreenRectf(), new Color(255,255,255) * brigthness);
             Dependencies.GetSB().End();
             
         }

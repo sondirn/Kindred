@@ -5,8 +5,10 @@ using System.Text;
 
 namespace Kindred.Base.ECS.Components
 {
-    public class TransformComponent
+    public class RigidBody
     {
-        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
+        public Vector2 Acceleration { get; set; }
     }
 }
+

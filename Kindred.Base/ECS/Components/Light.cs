@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Kindred.Base.Graphics.LightSystem
+namespace Kindred.Base.ECS.Components
 {
-    public class Light
+    public class LightComponent
     {
         public string BayerMask { get; set; }
         public int Radius { get; set; }

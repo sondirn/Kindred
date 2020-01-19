@@ -150,22 +150,12 @@ namespace Kindred.Base
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.TransparentBlack);
-
-            
-
-
-            //spriteBatch.End();
-
-           
-            GraphicsDevice.Clear(Color.Transparent);
-            
             scene.DrawScene(gameTime, spriteBatch);
-           
+            //Reset Render Target
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
 
-
+            //Draw Screen
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             Assets.GetEffect(EffectType.LightMultiplication).Parameters["lightMask"].SetValue(Assets.GetRenderTarget("LightsTarget"));
             Assets.GetEffect(EffectType.LightMultiplication).CurrentTechnique.Passes[0].Apply();

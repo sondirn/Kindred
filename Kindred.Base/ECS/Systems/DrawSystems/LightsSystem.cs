@@ -1,6 +1,5 @@
 ﻿using Comora;
 using Kindred.Base.ECS.Components;
-using Kindred.Base.Graphics.LightSystem;
 using Kindred.Base.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,14 +16,14 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
     {
         private readonly GraphicsDevice gd;
         private readonly SpriteBatch spriteBatch;
-        private ComponentMapper _lightMapper;
-        private ComponentMapper _position2DMapper;
+        private ComponentMapper<LightComponent> _lightMapper;
+        private ComponentMapper<TransformComponent> _position2DMapper;
 
         //TestVaiables
         
         
         public LightsSystem(GraphicsDevice graphicsDevice)
-            : base(Aspect.All(typeof(Light), typeof(Position2D)))
+            : base(Aspect.All(typeof(LightComponent), typeof(TransformComponent)))
         {
             gd = graphicsDevice;
             spriteBatch = new SpriteBatch(gd);
@@ -35,16 +34,15 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
             Dependencies.GetSB().Begin(Dependencies.GetCamera().Camera, SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp);
             foreach (var entity in ActiveEntities)
             {
-                Assets.AddTexture(@"Effects\BayerMatrix2048");
-                var mask = Assets.GetTexture(@"Effects\BayerMatrix2048");
-                var light = GetEntity(entity).Get<Light>();
-                var position = GetEntity(entity).Get<Position2D>();
+                
+                var light = _lightMapper.Get(entity);
+                var position = _position2DMapper.Get(entity);
                 var e = Assets.GetEffect(EffectType.PointLight);
                 e.Parameters["inputColor"].SetValue(light.Color);
                 e.Parameters["inputIntensity"].SetValue(light.Intensity);
                 e.Parameters["innerRadius"].SetValue(light.InnerRadius);
                 e.Parameters["innerIntensity"].SetValue(light.InnerIntensity);
-                e.Parameters["bayerMask"].SetValue(mask);
+                //e.Parameters["bayerMask"].SetValue(mask);
                 e.CurrentTechnique.Passes[0].Apply();
                 Dependencies.GetSB().FillRectangle(new RectangleF(position.Position.X - (light.Radius / 2), position.Position.Y - (light.Radius / 2), light.Radius, light.Radius), Color.White);
                 //Console.WriteLine(light.Position);
@@ -56,8 +54,8 @@ namespace Kindred.Base.ECS.Systems.DrawSystems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _lightMapper = mapperService.GetMapper<Light>();
-            _position2DMapper = mapperService.GetMapper<Position2D>();
+            _lightMapper = mapperService.GetMapper<LightComponent>();
+            _position2DMapper = mapperService.GetMapper<TransformComponent>();
         }
     }
 }

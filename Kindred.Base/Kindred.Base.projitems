@@ -12,10 +12,14 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Position.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\RigidBody.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\DrawSystems\LightsSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\PhysicsSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\PlayerControllerSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera2D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\LightSystem\Light.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ECS\Components\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)KindredMain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Layer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Maps\Map.cs" />
@@ -32,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Input\InputDirectory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Input\KeyboardInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\JsonDeserialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Content\Dungeon1.json">
@@ -45,6 +50,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)ECS\Systems\UpdateSystems\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Graphics\LightSystem\" />
   </ItemGroup>
 </Project>
